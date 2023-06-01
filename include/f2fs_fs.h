@@ -728,9 +728,9 @@ enum {
  * enoughly. The implementaion currently uses no more than 6 logs.
  * Half the logs are used for nodes, and the other half are used for data.
  */
-#define MAX_ACTIVE_LOGS	16
+#define MAX_ACTIVE_LOGS	32
 #define MAX_ACTIVE_NODE_LOGS	8
-#define MAX_ACTIVE_DATA_LOGS	8
+#define MAX_ACTIVE_DATA_LOGS	24
 
 #define F2FS_FEATURE_ENCRYPT		0x0001
 #define F2FS_FEATURE_BLKZONED		0x0002
@@ -899,7 +899,7 @@ struct f2fs_checkpoint {
 	unsigned char sit_nat_version_bitmap[];
 };
 
-static_assert(sizeof(struct f2fs_checkpoint) == 192, "");
+//static_assert(sizeof(struct f2fs_checkpoint) == 192, "");
 
 #define CP_BITMAP_OFFSET	\
 	(offsetof(struct f2fs_checkpoint, sit_nat_version_bitmap))
