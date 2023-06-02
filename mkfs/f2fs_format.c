@@ -551,6 +551,7 @@ static int f2fs_prepare_super_block(void)
 		c.cur_seg[CURSEG_COLD_DATA] = 0;
 		c.cur_seg[CURSEG_WARM_DATA] = 0;
 	} else if (c.heap) {
+    int last_alloc = CURSEG_WARM_DATA;
 		c.cur_seg[CURSEG_HOT_NODE] =
 				last_section(last_zone(total_zones));
 		c.cur_seg[CURSEG_WARM_NODE] = prev_zone(CURSEG_HOT_NODE);
@@ -558,6 +559,10 @@ static int f2fs_prepare_super_block(void)
 		c.cur_seg[CURSEG_HOT_DATA] = prev_zone(CURSEG_COLD_NODE);
 		c.cur_seg[CURSEG_COLD_DATA] = 0;
 		c.cur_seg[CURSEG_WARM_DATA] = next_zone(CURSEG_COLD_DATA);
+    for (int i = CURSEG_COLD_GC_DATA_START ; i <= CURSEG_COLD_GC_DATA_START ; i++) {
+      c.cur_seg[i] = next_zone(last_alloc);
+      last_alloc = i;
+    }
 	} else if (c.zoned_mode) {
 		c.cur_seg[CURSEG_HOT_NODE] = 0;
 		c.cur_seg[CURSEG_WARM_NODE] = next_zone(CURSEG_HOT_NODE);
@@ -746,7 +751,10 @@ static int f2fs_write_check_point_pack(void)
 	set_cp(cur_data_segno[0], c.cur_seg[CURSEG_HOT_DATA]);
 	set_cp(cur_data_segno[1], c.cur_seg[CURSEG_WARM_DATA]);
 	set_cp(cur_data_segno[2], c.cur_seg[CURSEG_COLD_DATA]);
-	for (i = 3; i < MAX_ACTIVE_NODE_LOGS; i++) {
+  for (int j = 3 ; j <= CURSEG_COLD_GC_DATA_END ; j++) {
+    set_cp(cur_data_segno[j], c.cur_seg[j]);
+  }
+	for (i = CURSEG_COLD_GC_DATA_END + 1; i < MAX_ACTIVE_NODE_LOGS; i++) {
 		set_cp(cur_node_segno[i], 0xffffffff);
 		set_cp(cur_data_segno[i], 0xffffffff);
 	}

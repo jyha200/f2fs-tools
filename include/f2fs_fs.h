@@ -468,7 +468,7 @@ struct f2fs_configuration {
 	size_t zone_blocks;
 	double overprovision;
 	double new_overprovision;
-	uint32_t cur_seg[6];
+	uint32_t cur_seg[22];
 	uint32_t segs_per_sec;
 	uint32_t secs_per_zone;
 	uint32_t segs_per_zone;
@@ -669,7 +669,10 @@ struct f2fs_configuration {
 /*
  * Copied from fs/f2fs/f2fs.h
  */
-#define	NR_CURSEG_DATA_TYPE	(3)
+
+#define MAX_GC_WORKER (16)
+
+#define	NR_CURSEG_DATA_TYPE	(3 + MAX_GC_WORKER)
 #define NR_CURSEG_NODE_TYPE	(3)
 #define NR_CURSEG_TYPE	(NR_CURSEG_DATA_TYPE + NR_CURSEG_NODE_TYPE)
 
@@ -677,6 +680,8 @@ enum {
 	CURSEG_HOT_DATA	= 0,	/* directory entry blocks */
 	CURSEG_WARM_DATA,	/* data blocks */
 	CURSEG_COLD_DATA,	/* multimedia or GCed data blocks */
+	CURSEG_COLD_GC_DATA_START,	/* multimedia or GCed data blocks */
+	CURSEG_COLD_GC_DATA_END = CURSEG_COLD_GC_DATA_START + MAX_GC_WORKER - 1,	/* multimedia or GCed data blocks */
 	CURSEG_HOT_NODE,	/* direct node blocks of directory files */
 	CURSEG_WARM_NODE,	/* direct node blocks of normal files */
 	CURSEG_COLD_NODE,	/* indirect node blocks */
