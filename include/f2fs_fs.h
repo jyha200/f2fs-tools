@@ -468,7 +468,7 @@ struct f2fs_configuration {
 	size_t zone_blocks;
 	double overprovision;
 	double new_overprovision;
-	uint32_t cur_seg[38];
+	uint32_t cur_seg[90];
 	uint32_t segs_per_sec;
 	uint32_t secs_per_zone;
 	uint32_t segs_per_zone;
@@ -670,7 +670,7 @@ struct f2fs_configuration {
  * Copied from fs/f2fs/f2fs.h
  */
 
-#define MAX_GC_WORKER (27)
+#define MAX_GC_WORKER (58)
 
 #define	NR_CURSEG_DATA_TYPE	(3 + MAX_GC_WORKER)
 #define NR_CURSEG_NODE_TYPE	(3)
@@ -733,9 +733,9 @@ enum {
  * enoughly. The implementaion currently uses no more than 6 logs.
  * Half the logs are used for nodes, and the other half are used for data.
  */
-#define MAX_ACTIVE_LOGS	44
+#define MAX_ACTIVE_LOGS	90
 #define MAX_ACTIVE_NODE_LOGS	8
-#define MAX_ACTIVE_DATA_LOGS	36
+#define MAX_ACTIVE_DATA_LOGS	82
 
 #define F2FS_FEATURE_ENCRYPT		0x0001
 #define F2FS_FEATURE_BLKZONED		0x0002

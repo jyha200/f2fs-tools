@@ -754,8 +754,10 @@ static int f2fs_write_check_point_pack(void)
   for (int j = 3 ; j <= CURSEG_COLD_GC_DATA_END ; j++) {
     set_cp(cur_data_segno[j], c.cur_seg[j]);
   }
-	for (i = CURSEG_COLD_GC_DATA_END + 1; i < MAX_ACTIVE_NODE_LOGS; i++) {
+	for (i = 3; i < MAX_ACTIVE_NODE_LOGS; i++) {
 		set_cp(cur_node_segno[i], 0xffffffff);
+	}
+	for (i = CURSEG_COLD_GC_DATA_END + 1; i < MAX_ACTIVE_DATA_LOGS; i++) {
 		set_cp(cur_data_segno[i], 0xffffffff);
 	}
 
