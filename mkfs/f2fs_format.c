@@ -551,7 +551,6 @@ static int f2fs_prepare_super_block(void)
 		c.cur_seg[CURSEG_COLD_DATA] = 0;
 		c.cur_seg[CURSEG_WARM_DATA] = 0;
 	} else if (c.heap) {
-    int last_alloc = CURSEG_WARM_DATA;
 		c.cur_seg[CURSEG_HOT_NODE] =
 				last_section(last_zone(total_zones));
 		c.cur_seg[CURSEG_WARM_NODE] = prev_zone(CURSEG_HOT_NODE);
@@ -559,10 +558,6 @@ static int f2fs_prepare_super_block(void)
 		c.cur_seg[CURSEG_HOT_DATA] = prev_zone(CURSEG_COLD_NODE);
 		c.cur_seg[CURSEG_COLD_DATA] = 0;
 		c.cur_seg[CURSEG_WARM_DATA] = next_zone(CURSEG_COLD_DATA);
-    for (int i = CURSEG_COLD_GC_DATA_START ; i <= CURSEG_COLD_GC_DATA_START ; i++) {
-      c.cur_seg[i] = next_zone(last_alloc);
-      last_alloc = i;
-    }
 	} else if (c.zoned_mode) {
 		c.cur_seg[CURSEG_HOT_NODE] = 0;
 		c.cur_seg[CURSEG_WARM_NODE] = next_zone(CURSEG_HOT_NODE);
@@ -571,6 +566,7 @@ static int f2fs_prepare_super_block(void)
 		c.cur_seg[CURSEG_WARM_DATA] = next_zone(CURSEG_HOT_DATA);
 		c.cur_seg[CURSEG_COLD_DATA] = next_zone(CURSEG_WARM_DATA);
 	} else {
+    int last_alloc = CURSEG_WARM_DATA;
 		c.cur_seg[CURSEG_HOT_NODE] = 0;
 		c.cur_seg[CURSEG_WARM_NODE] = next_zone(CURSEG_HOT_NODE);
 		c.cur_seg[CURSEG_COLD_NODE] = next_zone(CURSEG_WARM_NODE);
@@ -581,6 +577,13 @@ static int f2fs_prepare_super_block(void)
 		c.cur_seg[CURSEG_WARM_DATA] =
 				max(last_zone((total_zones >> 1)),
 					next_zone(CURSEG_COLD_DATA));
+    for (int i = CURSEG_COLD_GC_DATA_START ; i <= CURSEG_COLD_GC_DATA_END ; i++) {
+      c.cur_seg[i] = next_zone(last_alloc);
+      last_alloc = i;
+    }
+    for (int i = 0 ; i < NO_CHECK_TYPE ; i++) {
+      printf("%d : %d\n", i, c.cur_seg[i]);
+    }
 	}
 
 	/* if there is redundancy, reassign it */
