@@ -925,7 +925,7 @@ static int f2fs_write_check_point_pack(void)
 
 	journal->sit_j.entries[0].segno = cp->cur_node_segno[0];
 	journal->sit_j.entries[0].se.vblocks =
-				cpu_to_le16((CURSEG_HOT_NODE << 10) |
+				cpu_to_le32((CURSEG_HOT_NODE << 10) |
 						(1 + c.quota_inum + c.lpf_inum));
 	f2fs_set_bit(0, (char *)journal->sit_j.entries[0].se.valid_map);
 	for (i = 1; i <= c.quota_inum; i++)
@@ -937,7 +937,7 @@ static int f2fs_write_check_point_pack(void)
 		/* data sit for root */
 		journal->sit_j.entries[1].segno = cp->cur_data_segno[0];
 		journal->sit_j.entries[1].se.vblocks =
-					cpu_to_le16((CURSEG_HOT_DATA << 10) |
+					cpu_to_le32((CURSEG_HOT_DATA << 10) |
 							(1 + c.quota_dnum + c.lpf_dnum));
 		f2fs_set_bit(0, (char *)journal->sit_j.entries[1].se.valid_map);
 		for (i = 1; i <= c.quota_dnum; i++)
@@ -947,15 +947,15 @@ static int f2fs_write_check_point_pack(void)
 	} else {
 		journal->sit_j.entries[1].segno = cp->cur_node_segno[1];
 		journal->sit_j.entries[1].se.vblocks =
-					cpu_to_le16((CURSEG_WARM_NODE << 10));
+					cpu_to_le32((CURSEG_WARM_NODE << 10));
 		journal->sit_j.entries[2].segno = cp->cur_node_segno[2];
 		journal->sit_j.entries[2].se.vblocks =
-					cpu_to_le16((CURSEG_COLD_NODE << 10));
+					cpu_to_le32((CURSEG_COLD_NODE << 10));
 
 		/* data sit for root */
 		journal->sit_j.entries[3].segno = cp->cur_data_segno[0];
 		journal->sit_j.entries[3].se.vblocks =
-					cpu_to_le16((CURSEG_HOT_DATA << 10) |
+					cpu_to_le32((CURSEG_HOT_DATA << 10) |
 							(1 + c.quota_dnum + c.lpf_dnum));
 		f2fs_set_bit(0, (char *)journal->sit_j.entries[3].se.valid_map);
 		for (i = 1; i <= c.quota_dnum; i++)
@@ -965,10 +965,10 @@ static int f2fs_write_check_point_pack(void)
 
 		journal->sit_j.entries[4].segno = cp->cur_data_segno[1];
 		journal->sit_j.entries[4].se.vblocks =
-					cpu_to_le16((CURSEG_WARM_DATA << 10));
+					cpu_to_le32((CURSEG_WARM_DATA << 10));
 		journal->sit_j.entries[5].segno = cp->cur_data_segno[2];
 		journal->sit_j.entries[5].se.vblocks =
-					cpu_to_le16((CURSEG_COLD_DATA << 10));
+					cpu_to_le32((CURSEG_COLD_DATA << 10));
 	}
 
 	memcpy(sum_compact_p, &journal->n_sits, SUM_JOURNAL_SIZE);

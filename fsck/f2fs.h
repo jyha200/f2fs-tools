@@ -144,7 +144,7 @@ struct seg_entry {
 	unsigned short ckpt_valid_blocks;	/* # of valid blocks last cp, for recovered data/node */
 	unsigned char *cur_valid_map;   /* validity bitmap of blocks */
 	unsigned char *ckpt_valid_map;	/* validity bitmap of blocks last cp, for recovered data/node */
-	unsigned char type;             /* segment type like CURSEG_XXX_TYPE */
+	unsigned int type;             /* segment type like CURSEG_XXX_TYPE */
 	unsigned char orig_type;        /* segment type like CURSEG_XXX_TYPE */
 	unsigned char ckpt_type;        /* segment type like CURSEG_XXX_TYPE , for recovered data/node */
 	unsigned long long mtime;       /* modification time of the segment */

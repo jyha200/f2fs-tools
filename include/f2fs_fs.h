@@ -468,7 +468,7 @@ struct f2fs_configuration {
 	size_t zone_blocks;
 	double overprovision;
 	double new_overprovision;
-	uint32_t cur_seg[90];
+	uint32_t cur_seg[100];
 	uint32_t segs_per_sec;
 	uint32_t secs_per_zone;
 	uint32_t segs_per_zone;
@@ -670,7 +670,7 @@ struct f2fs_configuration {
  * Copied from fs/f2fs/f2fs.h
  */
 
-#define MAX_GC_WORKER (58)
+#define MAX_GC_WORKER (72)
 
 #define	NR_CURSEG_DATA_TYPE	(3 + MAX_GC_WORKER)
 #define NR_CURSEG_NODE_TYPE	(3)
@@ -733,9 +733,9 @@ enum {
  * enoughly. The implementaion currently uses no more than 6 logs.
  * Half the logs are used for nodes, and the other half are used for data.
  */
-#define MAX_ACTIVE_LOGS	90
+#define MAX_ACTIVE_LOGS	100
 #define MAX_ACTIVE_NODE_LOGS	8
-#define MAX_ACTIVE_DATA_LOGS	82
+#define MAX_ACTIVE_DATA_LOGS	92
 
 #define F2FS_FEATURE_ENCRYPT		0x0001
 #define F2FS_FEATURE_BLKZONED		0x0002
@@ -1192,18 +1192,18 @@ static_assert(sizeof(struct f2fs_nat_block) == 4095, "");
 	 >> SIT_VBLOCKS_SHIFT)
 
 struct f2fs_sit_entry {
-	__le16 vblocks;				/* reference above */
+	__le32 vblocks;				/* reference above */
 	__u8 valid_map[SIT_VBLOCK_MAP_SIZE];	/* bitmap for valid blocks */
 	__le64 mtime;				/* segment age for cleaning */
 } __attribute__((packed));
 
-static_assert(sizeof(struct f2fs_sit_entry) == 74, "");
+static_assert(sizeof(struct f2fs_sit_entry) == 76, "");
 
 struct f2fs_sit_block {
 	struct f2fs_sit_entry entries[SIT_ENTRY_PER_BLOCK];
 };
 
-static_assert(sizeof(struct f2fs_sit_block) == 4070, "");
+static_assert(sizeof(struct f2fs_sit_block) == 4028, "");
 
 /*
  * For segment summary
@@ -1295,7 +1295,7 @@ struct sit_journal_entry {
 	struct f2fs_sit_entry se;
 } __attribute__((packed));
 
-static_assert(sizeof(struct sit_journal_entry) == 78, "");
+static_assert(sizeof(struct sit_journal_entry) == 80, "");
 
 struct sit_journal {
 	struct sit_journal_entry entries[SIT_JOURNAL_ENTRIES];
